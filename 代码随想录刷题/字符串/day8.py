@@ -58,3 +58,30 @@ class Solution:
                     fir += 1
                     sec -= 1
         return "".join(sl)
+
+topic="""
+54. 替换数字（第八期模拟笔试）
+题目描述
+给定一个字符串 s，它包含小写字母和数字字符，请编写一个函数，将字符串中的字母字符保持不变，而将每个数字字符替换为number。 例如，对于输入字符串 "a1b2c3"，函数应该将其转换为 "anumberbnumbercnumber"。
+输入描述
+输入一个字符串 s,s 仅包含小写字母和数字字符。
+输出描述
+打印一个新的字符串，其中每个数字字符都被替换为了number
+输入示例
+a1b2c3
+输出示例
+anumberbnumbercnumber
+"""
+
+def main():
+    s=input().strip()
+    sl=[]
+    for i in s:
+        if i.isdigit():
+            sl.append("number")
+        else:
+            sl.append(i)
+    print("".join(sl))
+
+if __name__=="__main__":
+    main()
