@@ -176,6 +176,36 @@ nums[a] + nums[b] + nums[c] + nums[d] == target
 输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
 """
 
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        # 和三数之和类似的思路
+        nums.sort()
+        ans=[]
+        n=len(nums)
+        for f in range(n-3):
+            fir=nums[f]
+            # 跳过第一个重复的
+            if f>0 and fir==nums[f-1]:continue
+            for s in range(f+1,n-2):
+                sec=nums[s]
+                if s>f+1 and sec==nums[s-1]:continue
+                thi=s+1
+                fou=n-1
+                while thi<fou:
+                    r=fir+sec+nums[thi]+nums[fou]
+                    if r==target:
+                        ans.append([fir,sec,nums[thi],nums[fou]])
+                        thi+=1
+                        while thi<fou and nums[thi]==nums[thi-1]:
+                            thi+=1
+                        fou-=1
+                        while fou>thi and nums[fou]==nums[fou+1]:
+                            fou-=1
+                    elif r<target:
+                        thi+=1
+                    else:
+                        fou-=1
+        return ans
 
 
 
