@@ -208,6 +208,40 @@ topic="""
 """
 
 
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        # 先找到插入的位置
+        # 二叉搜索树的话，如果val小于当前节点的值，则应该插入到左子树中，否则应该插入右子树
+        # 边界条件是什么，如何才能判断当前是需要插入的节点，需要保存父节点，这样才能插入
+        # pre=root
+        if root == None:
+            return TreeNode(val)
+
+        def dfs(root, pre, val):
+            if root is None:
+                # 此时需要插入
+                newNode = TreeNode(val)
+                if val < pre.val:
+                    pre.left = newNode
+                else:
+                    pre.right = newNode
+                return
+            pre = root
+            if root.val > val:
+                dfs(root.left, pre, val)
+            else:
+                dfs(root.right, pre, val)
+
+        dfs(root, None, val)
+        return root
+
+
 
 
 
