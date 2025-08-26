@@ -262,6 +262,26 @@ class Solution:
         dfs(0,target,[])
         return ans
 
+# 选或不选的方式，就是选不选当前ind指向的元素
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # 试一下，选和不选的思路
+        ans=[]
+        path=[]
+        n=len(candidates)
+        def dfs(ind,target):
+            if target==0:
+                ans.append(path.copy())
+                return
+            if ind==n or target<0:return
+            # 不选
+            dfs(ind+1,target)
+            # 选
+            path.append(candidates[ind])
+            dfs(ind,target-candidates[ind])
+            path.pop()
+        dfs(0,target)
+        return ans
 
 
 
