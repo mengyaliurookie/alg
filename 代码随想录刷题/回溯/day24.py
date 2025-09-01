@@ -306,6 +306,49 @@ board[i][j] 是一位数字或者 '.'
 """
 
 
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+
+        # 需要遍历一遍这个数独表，然后找出每个点可以安排的数字，然后在每次选定一个数字之后，要更新这个点可以影响到的点的状态，
+        #
+        def dfs(board):
+            for i in range(9):
+                for j in range(9):
+                    if board[i][j] != '.': continue
+                    for k in range(1, 10):
+                        if isValid(i, j, board, str(k)):
+                            board[i][j] = str(k)
+                            if dfs(board): return True
+                            board[i][j] = '.'
+                    return False
+            return True
+
+        def isValid(row, col, board, val):
+            # 查看val是不是已经存在于以row，col为坐标的三个条件，即行，列，3X3宫格内，如果存在就返回False
+            # 否则就返回True
+            # 行
+            for c in range(9):
+                if board[row][c] == val:
+                    return False
+            # 列
+            for r in range(9):
+                if board[r][col] == val:
+                    return False
+            # 3X3宫格
+            # 确定当前节点属于哪个3X3宫内部
+            startrow = int(row / 3) * 3
+            startcol = int(col / 3) * 3
+            for i in range(startrow, startrow + 3):
+                for j in range(startcol, startcol + 3):
+                    if board[i][j] == val:
+                        return False
+            return True
+
+        return dfs(board)
+
 
 
 
