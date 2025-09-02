@@ -74,6 +74,78 @@ topic="""
 """
 
 
+class Solution:
+    def wiggleMaxLength(self, nums: List[int]) -> int:
+        # 找波峰和波谷
+        # 尝试用两个指针来寻找拐点
+        positive = False
+        negative = False
+        if len(nums) == 1: return 1
+        ans = 1
+        for i, v in enumerate(nums):
+            if i > 0:
+                if nums[i] - nums[i - 1] > 0:
+                    # 此时应该是正，如果上一个是negative为True的话，说明出现拐点了
+                    if negative: ans += 1
+                    positive = True
+                    negative = False
+                elif nums[i] - nums[i - 1] < 0:
+                    if positive: ans += 1
+                    positive = False
+                    negative = True
+        # 如果没出现过拐点，那么就需要把ans减去1
+        if not negative and not positive:
+            ans -= 1
+        # print(ans)
+        return ans + 1
+
+
+# 53. 最大子序和
+topic="""
+给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+子数组是数组中的一个连续部分。
+
+ 
+
+示例 1：
+
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+示例 2：
+
+输入：nums = [1]
+输出：1
+示例 3：
+
+输入：nums = [5,4,-1,7,8]
+输出：23
+"""
+
+
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        # 只要局部和小于零，那么就不会是最大连续子数组的一部分
+        psum = nums[0]
+        first = 0
+        sec = 0
+        res = max(psum, float('-inf'))
+        n = len(nums)
+        while sec < n:
+            if psum < 0:
+                sec += 1
+                first = sec
+                if sec < n:
+                    psum = nums[sec]
+                res = max(res, psum)
+            else:
+                sec += 1
+                if sec < n:
+                    psum += nums[sec]
+                res = max(res, psum)
+        return res
+
 
 
 
