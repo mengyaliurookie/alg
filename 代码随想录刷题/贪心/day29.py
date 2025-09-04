@@ -1,4 +1,4 @@
-
+from typing import List
 # 134. 加油站
 topic="""
 在一条环路上有 n 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
@@ -224,15 +224,41 @@ topic="""
 输出：[[4,0],[5,0],[2,2],[3,2],[1,4],[6,0]]
 """
 
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        # 选一个身高最低的人，他的位置应该是确定的，因为只要是在他前面的都会比他高
+        # 但是要找的是还有多少空位置的第几个
+        n=len(people)
+        ans=[0 for _ in people]
+        people.sort(key=lambda x: (x[0], -x[1]))
+        print(people)
+        for p in people:
+            start=0
+            # 第l个位置为空的
+            l=p[1]+1
+            # r表示第几个空位置
+            r=0
+            while True:
+                if ans[start]==0:
+                    # 找到一个空位置，那么r加一
+                    r+=1
+                # d当r等于l的时候，此时就找到位置了
+                if r==l:
+                    break
+                start+=1
+            ans[start]=p
+        return ans
 
-
-
-
-
-
-
-
-
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        # 选一个身高最低的人，他的位置应该是确定的，因为只要是在他前面的都会比他高
+        # 但是要找的是还有多少空位置的第几个
+        n=len(people)
+        ans=[]
+        people.sort(key=lambda x: (-x[0], x[1]))
+        for p in people:
+            ans.insert(p[1],p)
+        return ans
 
 
 
