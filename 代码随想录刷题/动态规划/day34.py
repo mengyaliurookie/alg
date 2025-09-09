@@ -191,6 +191,135 @@ topic="""
 2 <= n <= 58
 """
 
+# 这里是递归加缓存的记忆化搜索版本
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        # 拆分为子问题拆出一个1，那么剩下n-1，k-1个数
+        # 拆出一个2，那么剩下n-2，k-1个数
+        # 。。。
+        # 拆出一个n-k+1，那么剩下k-1个数
+        # k从2到n
+        if n==2:return 1
+        if n==3:return 2
+        if n==4:return 4
+        @cache
+        def dfs(n):
+            if n<=1:
+                return 1
+            maxv=float('-inf')
+            for i in range(1,n+1):
+                r=i*dfs(n-i)
+                maxv=max(r,maxv)
+            return maxv
+        return dfs(n)
+
+# 这是根据递归版本改成的动态规划版本
+class Solution:
+    def integerBreak(self, n: int) -> int:
+        # 拆分为子问题拆出一个1，那么剩下n-1，k-1个数
+        # 拆出一个2，那么剩下n-2，k-1个数
+        # 。。。
+        # 拆出一个n-k+1，那么剩下k-1个数
+        # k从2到n
+
+        # 转化为动态规划的形式
+        # dp[n]=max(dp[n-1],2*dp[n-2],3*dp[n-3]......)
+        if n==2:return 1
+        if n==3:return 2
+        if n==4:return 4
+        dp=[1]*(n+1)
+        dp[1],dp[2],dp[3],dp[4]=1,2,3,4
+        for i in range(5,n+1):
+            maxv=float('-inf')
+            # print('i: ',i)
+            for j in range(1,i):
+                # print('j: ',j)
+                maxv=max(j*dp[i-j],maxv)
+            dp[i]=maxv
+        return dp[n]
+        # if n==2:return 1
+        # if n==3:return 2
+        # if n==4:return 4
+        # @cache
+        # def dfs(n):
+        #     if n<=1:
+        #         return 1
+        #     maxv=float('-inf')
+        #     for i in range(1,n+1):
+        #         r=i*dfs(n-i)
+        #         maxv=max(r,maxv)
+        #     return maxv
+        # return dfs(n)
+
+
+# 96.不同的二叉搜索树
+topic="""
+给你一个整数 n ，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的 二叉搜索树 有多少种？返回满足题意的二叉搜索树的种数。
+
+ 
+
+示例 1：
+
+
+输入：n = 3
+输出：5
+示例 2：
+
+输入：n = 1
+输出：1
+ 
+
+提示：
+
+1 <= n <= 19
+"""
+class Solution:
+    def numTrees(self, n: int) -> int:
+        # dp[i]: 表示由 i 个节点组成，能构成多少种不同的二叉搜索树
+        dp = [0] * (n + 1)
+        
+        # 初始化
+        dp[0] = 1 # 空树是一种情况
+        
+        # 递推公式: dp[i] = sum(dp[j-1] * dp[i-j]) for j in 1...i
+        # i 从 1 遍历到 n
+        for i in range(1, n + 1):
+            # j 从 1 遍历到 i, 代表当前根节点的序号
+            for j in range(1, i + 1):
+                # 左子树节点数 j-1, 右子树节点数 i-j
+                dp[i] += dp[j - 1] * dp[i - j]
+                
+        return dp[n]
+
+# 这是一个递归加缓存的记忆化搜索版本
+class Solution:
+    def numTrees(self, n: int) -> int:
+        # 怎么转化为一个子问题呢，假设根节点是1，那么只能是右子树是2到n能构成多少种
+        # 根节点是2，那么就是左子树1，右子树3到n
+        # 根节点是3，那么左节点是1到2构成的乘以4到n构成的
+
+        @cache
+        def dfs(start,end):
+            if (end-start)==0:
+                return 1
+            if (end-start)==1:
+                return 2
+            ans=0
+            for i in range(start,end+1):
+                if i==start:
+                    left=1
+                    right=dfs(start+1,end)
+                elif i==end:
+                    left=dfs(start,end-1)
+                    right=1
+                else:
+                    left=dfs(start,i-1)
+                    right=dfs(i+1,end)
+                ans+=left*right
+            return ans
+        return dfs(1,n)
+            
+
 
 
 
