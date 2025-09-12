@@ -97,6 +97,23 @@ class Solution:
         ans=dfs(0,s)
         return ans
 
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        total_sum = sum(nums)  # 计算nums的总和
+        if abs(target) > total_sum:
+            return 0  # 此时没有方案
+        if (target + total_sum) % 2 == 1:
+            return 0  # 此时没有方案
+        target_sum = (target + total_sum) // 2  # 目标和
+        dp = [0] * (target_sum + 1)  # 创建动态规划数组，初始化为0
+        dp[0] = 1  # 当目标和为0时，只有一种方案，即什么都不选
+        for num in nums:
+            for j in range(target_sum, num - 1, -1):
+                dp[j] += dp[j - num]  # 状态转移方程，累加不同选择方式的数量
+        return dp[target_sum]  # 返回达到目标和的方案数
+
+
+
 # 474.一和零
 topic="""
 给你一个二进制字符串数组 strs 和两个整数 m 和 n 。
@@ -119,4 +136,67 @@ topic="""
 输出：2
 解释：最大的子集是 {"0", "1"} ，所以答案是 2 。
 """
+# 记忆化搜索版本的
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        # 还是选和不选的问题
+        le=len(strs)
+        def getzo(st):
+            a,b=0,0
+            for i in st:
+                if i=='0':a+=1
+                else:b+=1
+            return a,b
+        @cache
+        def dfs(i,m,n):
+            if m<0 or n<0:
+                # 说明选多了，需要减去1
+                return -1
+            if i==le:
+                return 0
+            o,l=getzo(strs[i])
+            left=dfs(i+1,m-o,n-l)+1
+            right=dfs(i+1,m,n)
+            return max(left,right)
+        return dfs(0,m,n)
+
+# 动态规划版本的
+class Solution:
+    def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        # 还是选和不选的问题
+        le=len(strs)
+        def getzo(st):
+            a,b=0,0
+            for i in st:
+                if i=='0':a+=1
+                else:b+=1
+            return a,b
+        # dp数组的含义是，根据递归函数的参数i表示物品选还是不选
+        # m和n表示背包的容量
+        # 当装满一个背包的时候就停止
+        # dp[i][j]表示当背包容量m为i，n为j的时候装满背包最多的子集个数
+        # 递推公式是dp[i][j]=max(dp[i][j],dp[i-o][j-l]+1)
+        # 初始条件是
+        dp=[[0]*(n+1) for _ in range(m+1)]
+        for i in strs:
+            o,l=getzo(i)
+            for mm in range(m,o-1,-1):
+                for nn in range(n,l-1,-1):
+                    dp[mm][nn]=max(dp[mm][nn],dp[mm-o][nn-l]+1)
+        print(dp)
+        return dp[m][n]
+        # @cache
+        # def dfs(i,m,n):
+        #     if m<0 or n<0:
+        #         # 说明选多了，需要减去1
+        #         return -1
+        #     if i==le:
+        #         return 0
+        #     o,l=getzo(strs[i])
+        #     left=dfs(i+1,m-o,n-l)+1
+        #     right=dfs(i+1,m,n)
+        #     return max(left,right)
+        # return dfs(0,m,n)
+
+
 
