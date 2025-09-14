@@ -24,8 +24,20 @@ topic="""
 输出：0
  
 """
-
-
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # 先用记忆化搜索的方式来处理一下
+        # 子问题是，当选择某一枚硬币的时候，和不选某一枚硬币的时候
+        n=len(coins)
+        @cache
+        def dfs(i,c):
+            if i<0:
+                return 0 if c==0 else inf
+            if c<coins[i]:#只能不选
+                return dfs(i-1,c)
+            return min(dfs(i-1,c),dfs(i,c-coins[i])+1)
+        ans=dfs(n-1,amount)
+        return ans if ans<inf else -1
 
 # 279.完全平方数
 topic="""
@@ -50,5 +62,48 @@ topic="""
 
 1 <= n <= 104
 """
+@cache
+def dfs(n,i):
+    if i==0:
+        return inf if n else 0
+    if i*i>n:
+        return dfs(n,i-1)
+    return min(dfs(n,i-1),dfs(n-i*i,i)+1)
+
+class Solution:
+    def numSquares(self, n: int) -> int:
+        
+        return dfs(n,isqrt(n))
+        
+
+# 139.单词拆分
+topic="""
+给你一个字符串 s 和一个字符串列表 wordDict 作为字典。如果可以利用字典中出现的一个或多个单词拼接出 s 则返回 true。
+
+注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+
+ 
+
+示例 1：
+
+输入: s = "leetcode", wordDict = ["leet", "code"]
+输出: true
+解释: 返回 true 因为 "leetcode" 可以由 "leet" 和 "code" 拼接成。
+示例 2：
+
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     注意，你可以重复使用字典中的单词。
+示例 3：
+
+输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出: false
+"""
+
+
+
+
+
 
 
