@@ -100,6 +100,87 @@ topic="""
 输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
 输出: false
 """
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        # 子问题
+        @cache
+        def dfs(s):
+            if len(s)==0:
+                return True
+            # if len(s)<len(''.join(path)):
+            #     return False
+            ans=False
+            nonlocal wordDict
+            for word in wordDict:
+                # if 
+                # path.append(word)
+                if not s.startswith(word):
+                    continue
+                res=dfs(s[len(word):])
+                if res:
+                    ans=True
+                # path.pop()
+            return ans
+        ans=dfs(s)
+        # print(ans)
+        return ans
+        
+
+# 多重背包问题
+
+# 记忆化搜索解法，但是会递归深度被限制
+import sys
+from functools import lru_cache
+sys.setrecursionlimit(100000)
+def main():
+    # 读取数据
+    cap,typ=list(map(int,sys.stdin.readline().strip().split()))
+    weights=list(map(int,sys.stdin.readline().strip().split()))
+    values=list(map(int,sys.stdin.readline().strip().split()))
+    nums=list(map(int,sys.stdin.readline().strip().split()))
+    # 还是用选和不选的思路来解决问题，不选i就加一
+    # 选的话，需要判断一下，当前是否还能选，用j来记录
+    # i表示第i种物品，j表示当前物品的第几个
+    @lru_cache(maxsize=None)
+    def dfs(i,j,capability):
+        if capability<0:
+            return float('-inf')
+        if i ==typ:
+            return 0
+        # 不选
+        left=dfs(i+1,0,capability)
+        right=float('-inf')
+        if j<nums[i] and capability>=weights[i]:
+            right=dfs(i,j+1,capability-weights[i])+values[i]
+        return max(left,right)
+    print(max(dfs(0,0,cap),0))
+
+if __name__=="__main__":
+    main()
+
+# 动态规划的形式
+import sys
+from functools import lru_cache
+# sys.setrecursionlimit(100000)
+def main():
+    # 读取数据
+    cap,typ=list(map(int,sys.stdin.readline().strip().split()))
+    weights=list(map(int,sys.stdin.readline().strip().split()))
+    values=list(map(int,sys.stdin.readline().strip().split()))
+    nums=list(map(int,sys.stdin.readline().strip().split()))
+    # 还是用选和不选的思路来解决问题，不选i就加一
+    # 选的话，需要判断一下，当前是否还能选，用j来记录
+    # i表示第i种物品，j表示当前物品的第几个
+    # dp[i][j]表示第i个物品，第i个物品的第j个数量下，最大价值
+    dp=[0]*(cap+1)
+    for i in range(typ):
+        for j in range(cap,weights[i]-1,-1):
+            for k in range(1,nums[i]+1):
+                if k * weights[i] > j:
+                    break
+                dp[j]=max(dp[j],dp[j-k*weights[i]]+k*values[i])
+    print(dp[-1])
+
 
 
 
