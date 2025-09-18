@@ -199,5 +199,117 @@ class Solution:
             ans=max(ans,dp[i])
         return ans
 
+# 392.判断子序列
+topic="""
+给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+
+字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
+
+进阶：
+
+如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
+
+致谢：
+
+特别感谢 @pbrother 添加此问题并且创建所有测试用例。
+
+ 
+
+示例 1：
+
+输入：s = "abc", t = "ahbgdc"
+输出：true
+示例 2：
+
+输入：s = "axc", t = "ahbgdc"
+输出：false
+"""
+# 直接查表解法
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        ns=len(s)
+        nt=len(t)
+        # 可以转化为子问题
+        # 感觉10亿级别的，应该得先把t分析一下，每个字符存成一个哈希，索引存成value，然后查表
+        dic=defaultdict(list)
+        for i,v in enumerate(t):
+            dic[v].append(i)
+        print(dic)
+        lastindex=-1
+        ans=True
+        for vs in s:
+            if dic[vs]:
+                tem=lastindex
+                for i in dic[vs]:
+                    if i>lastindex:
+                        lastindex=i
+                        break
+                if tem==lastindex:
+                    ans=False
+                    break
+            else:
+                ans=False
+                break
+        return ans
 
 
+# 记忆化搜索的解法
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        ns=len(s)
+        nt=len(t)
+        # 可以转化为子问题
+        @cache
+        def dfs(i,j):
+            if i==nt and j<ns:
+                # 当t遍历完成时，但是s没有遍历完成，则表示不存在
+                return False
+            if j==ns:
+                # 当s遍历完成时，就表示所有都在
+                return True
+            # 找到第一个和j相等的i
+            return dfs(i+1,j+1) if s[j]==t[i] else dfs(i+1,j)
+        return dfs(0,0)
+
+# 动态规划，二维解法
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        ns=len(s)
+        nt=len(t)
+        if ns==0:return True
+        if nt==0:return False
+        # 改成动态规划的解法
+        # dp[i][j]表示s[:i+1]是不是t[:j+1]的子序列
+        # 递推公式是：
+        # dp[i][j]=if s[i]==t[j]: dp[i][j]=dp[i-1][j-1]
+        # else: dp[i][j]=dp[i][j-1]
+        dp=[[False]*ns for _ in range(nt)]
+        for i in range(nt):
+            if s[0] in t[:i+1]:
+                dp[i][0]=True
+        for i in range(1,nt):
+            for j in range(1,ns):
+                if s[j]==t[i]:
+                    dp[i][j]=dp[i-1][j-1]
+                else:
+                    dp[i][j]=dp[i-1][j]
+        return dp[nt-1][ns-1]
+# 一维数组的方式
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        ns, nt = len(s), len(t)
+        if ns == 0:
+            return True
+
+        dp = [False] * ns
+        for i in range(nt):  # 👈 统一从 i=0 开始
+        # 逆序更新，避免覆盖
+            for j in range(ns - 1, -1, -1):  # 👈 j 从 ns-1 到 0
+                if j == 0:
+                    if s[0] == t[i]:
+                        dp[0] = True
+                else:
+                    if s[j] == t[i]:
+                        dp[j] = dp[j - 1]
+
+        return dp[ns - 1]
