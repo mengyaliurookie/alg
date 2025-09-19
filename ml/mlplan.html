@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ML Infra / MLOps — 6-Week Study Plan & Resources</title>
+  <style>
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; line-height:1.6; color:#111;margin:0;padding:24px; background:#f7f8fb}
+    .container{max-width:900px;margin:0 auto;background:#fff;border-radius:10px;padding:24px;box-shadow:0 6px 18px rgba(23,23,23,0.06)}
+    h1{margin:0 0 8px;font-size:26px}
+    h2{margin:18px 0 8px;font-size:18px}
+    p.lead{margin:0 0 18px;color:#444}
+    ul{margin:8px 0 18px;padding-left:20px}
+    .week{border-left:4px solid #2b6cb0;padding:12px 16px;margin:12px 0;border-radius:6px;background:#fbfdff}
+    a{color:#1a73e8}
+    .small{font-size:13px;color:#666}
+    pre{background:#0f1724;color:#f8fafc;padding:12px;border-radius:6px;overflow:auto}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    td,th{padding:8px;border:1px solid #eee;text-align:left}
+    .btn{display:inline-block;padding:8px 12px;background:#2b6cb0;color:#fff;border-radius:6px;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ML Infra / MLOps — 6-Week Study Plan & Resources</h1>
+    <p class="lead">A compact, work-friendly 6-week plan (2–3 hours/day) with ready-to-open resources. Copy this HTML to keep it offline or host it where you like.</p>
+
+    <h2>How to use</h2>
+    <ul>
+      <li>Each day: <strong>40m</strong> reading/video → <strong>60m</strong> hands-on → <strong>20m</strong> notes/summary.</li>
+      <li>Links are official docs / high-quality tutorials so you can start immediately.</li>
+      <li>Copy this file into a note, a repo README, or open as local HTML.</li>
+    </ul>
+
+    <h2>Week-by-week plan (overview)</h2>
+
+    <div class="week">
+      <h3>Week 0 — Cognition shift / System overview</h3>
+      <ul>
+        <li><a href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" target="_blank">Designing Machine Learning Systems — Chip Huyen (book)</a></li>
+        <li><a href="https://www.youtube.com/@chiphuyen" target="_blank">Chip Huyen — talks & lectures (YouTube)</a></li>
+        <li><a href="https://eng.uber.com/michelangelo/" target="_blank">Uber Michelangelo platform overview</a></li>
+        <li><a href="https://www.tensorflow.org/tfx" target="_blank">Google TFX overview</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 1 — Engineering fundamentals</h3>
+      <ul>
+        <li><a href="https://cheatography.com/davechild/cheat-sheets/linux-command-line/" target="_blank">Linux command cheat sheet</a></li>
+        <li><a href="https://pandas.pydata.org/docs/user_guide/index.html" target="_blank">Pandas user guide</a></li>
+        <li><a href="https://leetcode.com/problemset/database/" target="_blank">LeetCode — SQL problems</a></li>
+        <li><a href="https://docs.docker.com/get-started/" target="_blank">Docker: Get started</a></li>
+        <li><a href="https://docs.github.com/en/actions/quickstart" target="_blank">GitHub Actions quickstart</a></li>
+        <li>Project: <a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a> + Docker + deploy to <a href="https://render.com/docs/deploy-fastapi" target="_blank">Render</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 2 — Data pipeline & Feature Store</h3>
+      <ul>
+        <li><a href="https://docs.prefect.io/latest/getting-started/quickstart/" target="_blank">Prefect quickstart</a></li>
+        <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html" target="_blank">Apache Airflow tutorial</a></li>
+        <li><a href="https://docs.feast.dev/getting-started/quickstart" target="_blank">Feast feature store quickstart</a></li>
+        <li><a href="https://greatexpectations.io/expectations/" target="_blank">Great Expectations</a></li>
+        <li><a href="https://docs.evidentlyai.com/" target="_blank">EvidentlyAI docs</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 3 — Model training & experiment tracking</h3>
+      <ul>
+        <li><a href="https://mlflow.org/docs/latest/quickstart.html" target="_blank">MLflow quickstart</a></li>
+        <li><a href="https://wandb.ai/site/learn" target="_blank">Weights & Biases — quick learn</a></li>
+        <li><a href="https://optuna.org/#quickstart" target="_blank">Optuna quickstart</a></li>
+        <li>Kaggle dataset for practice: <a href="https://www.kaggle.com/mlg-ulb/creditcardfraud" target="_blank">Credit Card Fraud</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 4 — Deployment & Serving</h3>
+      <ul>
+        <li><a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a></li>
+        <li><a href="https://docs.ray.io/en/latest/serve/getting_started.html" target="_blank">Ray Serve quickstart</a></li>
+        <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank">Kubernetes basics</a></li>
+        <li><a href="https://docs.locust.io/en/stable/" target="_blank">Locust for load testing</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 5 — Monitoring & Observability</h3>
+      <ul>
+        <li><a href="https://prometheus.io/docs/prometheus/latest/getting_started/" target="_blank">Prometheus getting started</a></li>
+        <li><a href="https://grafana.com/tutorials/" target="_blank">Grafana tutorials</a></li>
+        <li><a href="https://github.com/evidentlyai/evidently" target="_blank">Evidently GitHub (examples)</a></li>
+      </ul>
+    </div>
+
+    <div class="week">
+      <h3>Week 6 — Cloud & New trends</h3>
+      <ul>
+        <li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html" target="_blank">AWS SageMaker intro</a></li>
+        <li><a href="https://cloud.google.com/vertex-ai/docs/start/introduction-unified-platform" target="_blank">GCP Vertex AI intro</a></li>
+        <li><a href="https://docs.pinecone.io/docs/quickstart" target="_blank">Pinecone quickstart</a></li>
+        <li><a href="https://weaviate.io/developers/quickstart" target="_blank">Weaviate quickstart</a></li>
+        <li><a href="https://python.langchain.com/docs/use_cases/question_answering/" target="_blank">LangChain RAG tutorial</a></li>
+      </ul>
+    </div>
+
+    <h2>Daily routine (recommended)</h2>
+    <p class="small">1) 40 minutes reading/video • 2) 60 minutes hands-on • 3) 20 minutes notes</p>
+
+    <h2>Deliverables</h2>
+    <ul>
+      <li>6 small projects (one per week)</li>
+      <li>1 end-to-end demo (train → deploy → monitor)</li>
+      <li>6 weekly summary notes (store in Notion / Obsidian / GitHub)</li>
+    </ul>
+
+    <p class="small">Copy this file to your disk (save as <code>mlops_6week_plan.html</code>) or copy-paste into a README to keep it handy.</p>
+
+    <p style="margin-top:18px"><a class="btn" href="#" onclick="copyToClipboard()">Copy full HTML to clipboard</a></p>
+
+    <script>
+      function copyToClipboard(){
+        const html = document.documentElement.outerHTML;
+        navigator.clipboard.writeText(html).then(()=>{
+          alert('Full HTML copied to clipboard — paste into a file and save.');
+        }).catch(()=>{alert('Copy failed — you can save this page via browser Save As.')});
+      }
+    </script>
+
+  </div>
+</body>
+</html>
