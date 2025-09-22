@@ -18,3 +18,21 @@ topic="""
 输入: nums = [1,2,3,4,3]
 输出: [2,3,4,-1,4]
 """
+# 单调栈的实现
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        # 可以double一下数组，然后找
+        dnums=[]
+        dnums.extend(nums)
+        dnums.extend(nums)
+        # print(f'dnums: {dnums}')
+        n=len(nums)
+        ans=[-1]*n
+        stack=[]
+        for i in range(2*n):
+            # print(stack)
+            while stack and dnums[stack[-1]]<dnums[i]:
+                ind=stack.pop()
+                ans[ind%n]=dnums[i]
+            stack.append(i)
+        return ans
