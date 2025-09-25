@@ -235,3 +235,217 @@ def main():
     ans = left & right
     for x, y in ans:
         print(x, y)
+
+
+# 104.建造最大岛屿
+topic="""
+题目描述
+给定一个由 1（陆地）和 0（水）组成的矩阵，你最多可以将矩阵中的一格水变为一块陆地，在执行了此操作之后，矩阵中最大的岛屿面积是多少。
+
+
+
+岛屿面积的计算方式为组成岛屿的陆地的总数。岛屿是被水包围，并且通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设矩阵外均被水包围。
+
+输入描述
+第一行包含两个整数 N, M，表示矩阵的行数和列数。之后 N 行，每行包含 M 个数字，数字为 1 或者 0，表示岛屿的单元格。
+输出描述
+输出一个整数，表示最大的岛屿面积。
+输入示例
+4 5
+1 1 0 0 0
+1 1 0 0 0
+0 0 1 0 0
+0 0 0 1 1
+输出示例
+6
+提示信息
+
+对于上面的案例，有两个位置可将 0 变成 1，使得岛屿的面积最大，即 6。
+
+
+数据范围：
+
+1 <= M, N <= 50。
+"""
+# 可以采用通过把每个0都尝试变成一之后，去利用dfs搜索，
+import sys
+from collections import deque
+token=0
+def main():
+    n,m=map(int,sys.stdin.readline().strip().split())
+    grid=[list(map(int,sys.stdin.readline().strip().split())) for _ in range(n)]
+    visited=[[-1]*m for _ in range(n)]
+    # visited中用小于i+j表示当前搜索还没有被访问过，用等于i+j表示已经被当前次访问过
+    direc=[[1,0],[0,1],[-1,0],[0,-1]]
+    def dfs(ii,jj):
+        nonlocal res
+        if visited[ii][jj]<token:
+            res+=1
+            visited[ii][jj]=token
+        for f in direc:
+            nexti=ii+f[0]
+            nextj=jj+f[1]
+            if 0<=nexti<n and 0<=nextj<m:
+                # 满足范围
+                if grid[nexti][nextj]==1 and visited[nexti][nextj]<token:
+                    res+=1
+                    visited[nexti][nextj]=token
+                    dfs(nexti,nextj)
+    ans=0
+    for i in range(n):
+        for j in range(m):
+            global token
+            token+=1
+            if grid[i][j]==0:
+                res=0
+                grid[i][j]=1
+                dfs(i,j)
+                grid[i][j]=0
+                # print(f"i= {i} j= {j}")
+                # print(f"res= {res}")
+                ans=max(ans,res)
+            else:
+                res=0
+                dfs(i,j)
+                # print(f"i= {i} j= {j}")
+                # print(f"res= {res}")
+                ans=max(ans,res)
+    print(ans)
+
+
+# 还有另外一种思路就是，先把所有岛屿的面积都计算出来，
+# 然后遍历每个0，看它的上下左右是否有岛屿，如果有，就把它的面积加上去，
+# 最后取所有0的面积的最大值即可
+import sys
+from collections import deque
+
+token=0
+
+def main():
+    n,m=map(int,sys.stdin.readline().strip().split())
+    grid=[list(map(int,sys.stdin.readline().strip().split())) for _ in range(n)]
+    visited=[[-1]*m for _ in range(n)]
+    # visited中用小于i+j表示当前搜索还没有被访问过，用等于i+j表示已经被当前次访问过
+    direc=[[1,0],[0,1],[-1,0],[0,-1]]
+    
+    visited=[[False]*m for _ in range(n)]
+    def dfs(i,j,token):
+        res=0
+        if visited[i][j]==False:
+            res+=1
+            visited[i][j]=True
+            isonum[i][j]=token
+        for f in direc:
+            nexti=i+f[0]
+            nextj=j+f[1]
+            if 0<=nexti<n and 0<=nextj<m:
+                if grid[nexti][nextj]==1 and visited[nexti][nextj]==False:
+                    res+=dfs(nexti,nextj,token)
+        return res
+    ans=0
+    # 用一个同样的矩阵来记录岛屿编号
+    isonum=[[0]*m for _ in range(n)]
+    token=0
+    dic={}
+    # 先遍历一遍所有岛屿，并且记录下编号和面积
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j]==1 and visited[i][j]==False:
+                token+=1
+                res=dfs(i,j,token)
+                dic[token]=res
+                # print(f"i= {i} j= {j}")
+                # print(f"res= {res}")
+
+    # 在遍历一遍海洋，看看海洋四周连接的岛屿的面积
+    ans=0
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j]==0:
+                res=1
+                tem=set()
+                for f in direc:
+                    nexti=i+f[0]
+                    nextj=j+f[1]
+                    if 0<=nexti<n and 0<=nextj<m:
+                        # 查看一下上下左右所属的岛屿
+                        if isonum[nexti][nextj]>0:
+                            tem.add(isonum[nexti][nextj])
+                for t in tem:
+                    res+=dic[t]
+                ans=max(ans,res)
+            else:
+                ans=max(ans,dic[isonum[i][j]])
+
+    print(ans)
+
+
+
+# 106. 岛屿的周长
+topic="""
+106. 海岸线计算
+题目描述
+给定一个由 1（陆地）和 0（水）组成的矩阵，岛屿是被水包围，并且通过水平方向或垂直方向上相邻的陆地连接而成的。
+
+你可以假设矩阵外均被水包围。在矩阵中恰好拥有一个岛屿，假设组成岛屿的陆地边长都为 1，请计算海岸线，即：岛屿的周长。岛屿内部没有水域。
+
+输入描述
+第一行包含两个整数 N, M，表示矩阵的行数和列数。之后 N 行，每行包含 M 个数字，数字为 1 或者 0，表示岛屿的单元格。
+输出描述
+输出一个整数，表示岛屿的周长。
+输入示例
+5 5
+0 0 0 0 0 
+0 1 0 1 0
+0 1 1 1 0
+0 1 1 1 0
+0 0 0 0 0
+输出示例
+14
+提示信息
+岛屿的周长为 14。
+数据范围：
+1 <= M, N <= 50。
+"""
+
+import sys
+from collections import deque
+
+# 思路是，遍历岛屿的时候，看看四周是不是0，如果是0，就把周长加1
+# 不过要注意的是，因为会有靠边的情况，所以需要在矩阵的四周都加一圈0
+def main():
+    n,m=map(int,sys.stdin.readline().strip().split())
+    grid=[]
+    for i in range(n+2):
+        if i==0:
+            grid.append([0]*(m+2))
+        elif i==n+1:
+            grid.append([0]*(m+2))
+        else:
+            grid.append([0]+list(map(int,sys.stdin.readline().strip().split()))+[0])
+    n=n+2
+    m=m+2
+    visited=[[False]*m for _ in range(n)]
+    direction=[[1,0],[0,1],[-1,0],[0,-1]]
+    def dfs(i,j):
+        # 因为一开始是保证i，j指向的一定是1，并且四周是1的才会递归，所以不需要判断是不是1了
+        res=0
+        if visited[i][j]==False:
+            visited[i][j]=True
+        for f in direction:
+            nexti=i+f[0]
+            nextj=j+f[1]
+            if 0<=nexti<n and 0<=nextj<m:
+                if grid[nexti][nextj]==0:
+                    res+=1
+                if grid[nexti][nextj]==1 and visited[nexti][nextj]==False:
+                    res+=dfs(nexti,nextj)
+        return res
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j]==1 and visited[i][j]==False:
+                ans=dfs(i,j)
+    print(ans)          
+
+
+
