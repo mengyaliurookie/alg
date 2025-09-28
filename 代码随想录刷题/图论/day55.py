@@ -1,59 +1,3 @@
-# 105.有向图的完全联通
-topic="""
-题目描述
-给定一个有向图，包含 N 个节点，节点编号分别为 1，2，...，N。现从 1 号节点开始，如果可以从 1 号节点的边可以到达任何节点，则输出 1，否则输出 -1。
-输入描述
-第一行包含两个正整数，表示节点数量 N 和边的数量 K。 后续 K 行，每行两个正整数 s 和 t，表示从 s 节点有一条边单向连接到 t 节点。
-输出描述
-如果可以从 1 号节点的边可以到达任何节点，则输出 1，否则输出 -1。
-输入示例
-4 4
-1 2
-2 1
-1 3
-2 4
-输出示例
-1
-提示信息
-
-从 1 号节点可以到达任意节点，输出 1。
-
-数据范围：
-
-1 <= N <= 100；
-1 <= K <= 2000。
-"""
-
-import sys
-from collections import deque
-
-def main():
-    # 读取并存储图
-    n,k=map(int,input().strip().split())
-    grid=[[0]*(n+1) for _ in range(n+1)]
-    visited=[False]*(n+1)
-    for i in range(k):
-        j,m=map(int,input().strip().split())
-        grid[j][m]=1
-    # print(f"grid= {grid}")
-    def bfs():
-        queue=deque()
-        # 从1节点开始
-        queue.append(1)
-        visited[1]=True
-        while queue:
-            point=queue.popleft()
-            for i,v in enumerate(grid[point]):
-                if v==1 and visited[i]==False:
-                    queue.append(i)
-                    visited[i]=True
-    bfs()
-    # print(f"visited= {visited}")
-    if all(visited[1:]):
-        print(1)
-    else:
-        print(-1) 
-
 
 # 并查集理论基础
 topic="""
@@ -160,6 +104,192 @@ def main():
     else:
         print(0)
 
+# 108. 冗余连接
+topic="""
+题目描述
+有一个图，它是一棵树，他是拥有 n 个节点（节点编号1到n）和 n - 1 条边的连通无环无向图，例如如图：
 
-if __name__=="__main__":
-    main()
+
+
+
+
+现在在这棵树上的基础上，添加一条边（依然是n个节点，但有n条边），使这个图变成了有环图，如图：
+
+
+
+
+
+先请你找出冗余边，删除后，使该图可以重新变成一棵树。
+
+输入描述
+第一行包含一个整数 N，表示图的节点个数和边的个数。
+
+后续 N 行，每行包含两个整数 s 和 t，表示图中 s 和 t 之间有一条边。
+
+输出描述
+输出一条可以删除的边。如果有多个答案，请删除标准输入中最后出现的那条边。
+输入示例
+3
+1 2
+2 3
+1 3
+输出示例
+1 3
+提示信息
+
+
+
+
+图中的 1 2，2 3，1 3 等三条边在删除后都能使原图变为一棵合法的树。但是 1 3 由于是标准输出里最后出现的那条边，所以输出结果为 1 3
+
+
+
+数据范围：
+
+1 <= N <= 1000.
+"""
+import sys
+
+father=[]
+
+def find(u):
+    if father[u]!=u:
+        father[u]=find(father[u])
+    return father[u]
+
+def issame(u,v):
+    u=find(u)
+    v=find(v)
+    return u==v
+
+def union(u,v):
+    u=find(u)
+    v=find(v)
+    if u!=v:
+        father[u]=v
+
+def main():
+    n=int(input().strip())
+    # 如何能构成一个环呢，就是当加入的边数等于点数的时候，就出现环了
+    # 在并查集中，当一个集合中的新加入的两个点都已经存在在此集合中的时候，那么就说明出现了环
+    # 并查集的初始化
+    global father
+    father=[i for i in range(n+1)]
+    for _ in range(n):
+        i,j=map(int,input().strip().split())
+        if issame(i,j):
+            print(i,j)
+        else:
+            union(i,j)
+
+
+# 109. 冗余连接II
+topic="""
+题目描述
+有一种有向树,该树只有一个根节点，所有其他节点都是该根节点的后继。该树除了根节点之外的每一个节点都有且只有一个父节点，而根节点没有父节点。有向树拥有 n 个节点和 n - 1 条边。如图： 
+
+
+
+
+
+现在有一个有向图，有向图是在有向树中的两个没有直接链接的节点中间添加一条有向边。如图：
+
+
+
+
+输入一个有向图，该图由一个有着 n 个节点(节点编号 从 1 到 n)，n 条边，请返回一条可以删除的边，使得删除该条边之后该有向图可以被当作一颗有向树。
+
+输入描述
+第一行输入一个整数 N，表示有向图中节点和边的个数。 
+
+后续 N 行，每行输入两个整数 s 和 t，代表这是 s 节点连接并指向 t 节点的单向边
+
+输出描述
+输出一条可以删除的边，若有多条边可以删除，请输出标准输入中最后出现的一条边。
+输入示例
+3
+1 2
+1 3
+2 3
+输出示例
+2 3
+提示信息
+
+在删除 2 3 后有向图可以变为一棵合法的有向树，所以输出 2 3
+
+数据范围：
+
+1 <= N <= 1000.
+"""
+
+father=[]
+
+def find(u):
+    if father[u]!=u:
+        father[u]=find(father[u])
+    return father[u]
+
+def issame(u,v):
+    u=find(u)
+    v=find(v)
+    return u==v
+
+def union(u,v):
+    u=find(u)
+    v=find(v)
+    if u!=v:
+        father[v]=u
+
+def main():
+    n=int(input().strip())
+    # 如何能构成一个有向树呢，就是必须每个点只有一个入一个出，或者只有出，不能存在有两个入的情况，怎么表示入和出的呢
+    # 也得是构成环的时候删除，但是删除哪个呢，可能需要记录一下指向
+    # 出度是第一列
+    # 入度是第二列
+    # 因为只有一个父节点或者没有，所以入度必然小于等于1
+    # 而只有一个入度的意思就是在构造的过程中，当u!=find(u)的时候，说明已经有一个
+    # 又因为要构成一棵树，所以不能有环在
+    # 并查集的初始化
+    global father
+    father=[i for i in range(n+1)]
+    edges=[]
+    # 这是处理入度为二的
+    hastodel=[]
+    for _ in range(n):
+        i,j=map(int,input().strip().split())
+        edges.append([i,j])
+        # 如果没有被改变过
+        if j==find(j):
+            # 还需要判断一下有没有环
+            union(i,j)
+        else:
+            # 就需要弹出一下
+            oldi=father[j]
+            hastodel.append([i,j])
+            hastodel.append([oldi,j])             
+    # 最后再把矛盾的加入
+    # print(hastodel)
+    # 如果构成环，那么必须删除环中的那个
+    hashu=False
+    for i,j in hastodel:
+        if issame(i,j):
+            print(i,j)
+            hashu=True
+            break
+        else:
+            union(i,j)
+    # print(edges)
+    if hastodel:
+        if not hashu:
+            print(hastodel[-1][0],hastodel[-1][1])
+    else:
+        # 否则就是直接形成一个环了
+        father=[i for i in range(n+1)]
+        for i,j in edges:
+            if issame(i,j):
+                print(i,j)
+                break
+            else:
+                union(i,j)
+    # print(father)
+
