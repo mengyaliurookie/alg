@@ -241,8 +241,48 @@ def main():
         
     print(ans)
 
-if __name__=="__main__":
-    main()
+
+
+# 拓扑排序精讲
+def main():
+    # 拓扑排序，找到入度为0的点，然后加入到集合中，然后从图上把它删除
+    # 找入度为0的点，用邻接矩阵的话，就是判断某一列都是0的话，就是入度为0
+    # 从图上删除的话，就是把这一行和这一列都置为0
+    # 还需要判断有没有环，如果还有节点，但是不存在入度为0的点了，就证明有环了
+    # 但是这么写复杂度有点高。
+    # 如果直接用来存储每个节点的入度的话会更好一点，再删除的时候，遍历一遍节点然后
+    n,m=map(int,input().strip().split())
+    graph=[[0]*(n) for _ in range(n)]
+    degree=[0]*(n)
+    for _ in range(m):
+        i,j=map(int,input().strip().split())
+        graph[i][j]=1
+        degree[j]+=1
+    ans=[]
+    has=set()
+    
+    for _ in range(n):
+        # 总体上需要打印n个点，所以需要遍历n遍
+        # 查找degree中为0的点
+        hashu=True
+        for i,d in enumerate(degree):
+            if i not in has and d==0:
+                ans.append(i)
+                has.add(i)
+                hashu=False
+                break
+        if hashu:
+            # 说明没有为0的节点了
+            print(-1)
+            break
+        # 删除节点然后更新入度
+        for j in range(n):
+            if graph[i][j]==1:
+                degree[j]-=1
+    if not hashu:
+        print(" ".join(list(map(str,ans))))
+        
+
 
 
 
