@@ -167,7 +167,8 @@ def main():
         print(ans)
 
 # dijkstra算法
-# 用一个数组来表示从源点到每个点的最短距离
+# 用一个数组来表示从源点出发可以到达的最近距离
+# 初始条件是1节点到1节点的距离是0
 # 
 import math
 from functools import lru_cache
@@ -209,8 +210,55 @@ def main():
     else:
         print(mindist[-1])
 
+# dijkstra算法的优先队列实现
+import math
+import heapq
+
+def main():
+    # 初始条件是，到达1节点最短的路径是0
+    # 然后从1节点出发，可以到达的点的最短路径就是各自的
+    # 递推公式是可以到达与当前节点连接的各个点，加上各个点到当前点的路径值，中的最小值，就是可以达到当前节点的最短路径值
+    n,m=map(int,input().strip().split())
+    graph=[[0]*(n+1) for _ in range(n+1)]
+    for _ in range(m):
+        i,j,v=map(int,input().strip().split())
+        graph[i][j]=v
+
+    # dijkstra算法
+    mindist=[math.inf]*(n+1)
+    visited=[False]*(n+1)
+    heap=[]
+    # 步骤先把1节点更新为0
+    # 表示从1出发到达1最近距离为0
+    # 然后从1节点开始出发更新从1节点可以达到的节点的最近距离
+    # 然后标记1为已经访问
+    heapq.heappush(heap,(0,1))
+    mindist[1]=0
+    while heap:
+        # 获取当前可以到达的最短距离的点
+        cur=heapq.heappop(heap)[1]
+        if visited[cur]:
+            continue
+        # print(cur)
+        # 标记为已经访问
+        visited[cur]=True
+        # 更新源点经过当前点可以到达的其他点的最短距离
+        for j in range(1,n+1):
+            if graph[cur][j]>0 and not visited[j] and mindist[cur]+graph[cur][j]<mindist[j]:
+                # 如果源点经过当前点可以到达j的最短距离更小的话，就更新到达j的路径
+                mindist[j]=mindist[cur]+graph[cur][j]
+                # 并且把它加入到优先队列中
+                heapq.heappush(heap,(mindist[j],j))
+
+    if mindist[n]==math.inf:
+        print(-1)
+    else:
+        print(mindist[n])
 
 
+
+if __name__=="__main__":
+    main()
 
 
 
