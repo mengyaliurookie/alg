@@ -86,6 +86,35 @@ def main():
         print("unconnected")
     else:
         print(mindist[n])
-if __name__=="__main__":
-    main()
 
+# 队列优化版本的bellman_ford算法，
+# 因为bellman_ford算法是每次遍历所有的边，代表着从源点出发经过多少条边可以到达边的终点的位置的最短路径
+# 而队列优化版本的bellman_ford算法，是每次遍历所有的边，代表着从源点出发经过多少条边可以到达边的终点的位置的最短路径
+# 但是只有当边的终点的最短路径长度发生了变化，才会将边的终点加入到队列中
+import math
+from collections import deque
+def main():
+    n,m=map(int,input().strip().split())
+    edges=[[] for _ in range(n+1)]
+    for _ in range(m):
+        i,j,v=map(int,input().strip().split())
+        edges[i].append((j,v))
+    mindist=[math.inf]*(n+1)
+    # 表示从源点出发到达每个点的最短路径长度
+    # 初始化从源点到达源点的最短路径为0
+    mindist[1]=0
+    # 因为到达n点的话，最短路径最多可以把每个顶点都经历一遍，这样就最多有n-1条边。如果还可以多次经过同一顶点的话，那么必然有环，此时可以选择不走环就可以了。
+    # 每次遍历所有的边，代表着从源点出发经过多少条边可以到达边的终点的位置的最短路径
+    queue=deque()
+    queue.append(1)
+    while queue:
+        i=queue.popleft()
+        for j,k in edges[i]:
+            if  mindist[j]>mindist[i]+k:
+                mindist[j]=mindist[i]+k
+                queue.append(j)
+    if mindist[n]==math.inf:
+        print("unconnected")
+    else:
+        print(mindist[n])
+    
