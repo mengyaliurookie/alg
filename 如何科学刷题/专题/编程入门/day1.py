@@ -581,5 +581,163 @@ n == matrix[i].length
 1 <= m * n <= 105
 -109 <= matrix[i][j] <= 109
 """
+class Solution:
+    def transpose(self, matrix: List[List[int]]) -> List[List[int]]:
+        row=len(matrix)
+        col=len(matrix[0])
+        matrixt=[[0]*row for _ in range(col)]
+        for i in range(row):
+            for j in range(col):
+                matrixt[j][i]=matrix[i][j]
+        return matrixt
 
+# 1422 分割字符串的最大得分
+topic="""
+给你一个由若干 0 和 1 组成的字符串 s ，请你计算并返回将该字符串分割成两个 非空 子字符串（即 左 子字符串和 右 子字符串）所能获得的最大得分。
 
+「分割字符串的得分」为 左 子字符串中 0 的数量加上 右 子字符串中 1 的数量。
+
+ 
+
+示例 1：
+
+输入：s = "011101"
+输出：5 
+解释：
+将字符串 s 划分为两个非空子字符串的可行方案有：
+左子字符串 = "0" 且 右子字符串 = "11101"，得分 = 1 + 4 = 5 
+左子字符串 = "01" 且 右子字符串 = "1101"，得分 = 1 + 3 = 4 
+左子字符串 = "011" 且 右子字符串 = "101"，得分 = 1 + 2 = 3 
+左子字符串 = "0111" 且 右子字符串 = "01"，得分 = 1 + 1 = 2 
+左子字符串 = "01110" 且 右子字符串 = "1"，得分 = 2 + 1 = 3
+示例 2：
+
+输入：s = "00111"
+输出：5
+解释：当 左子字符串 = "00" 且 右子字符串 = "111" 时，我们得到最大得分 = 2 + 3 = 5
+示例 3：
+
+输入：s = "1111"
+输出：3
+ 
+
+提示：
+
+2 <= s.length <= 500
+字符串 s 仅由字符 '0' 和 '1' 组成。
+"""
+
+class Solution:
+    def maxScore(self, s: str) -> int:
+        n=len(s)
+        right=0
+        for j in range(1,n):
+            if s[j]=='1':
+                right+=1
+        left=1 if s[0]=='0' else 0
+        score=max(right+left,0)
+        for i in range(1,n-1):
+            if s[i]=='0':
+                left+=1
+            else:
+                right-=1
+            score=max(left+right,score)
+        return score
+
+# 2568 统计范围内的元音字符串数
+topic="""
+给你一个下标从 0 开始的字符串数组 words 和两个整数：left 和 right 。
+
+如果字符串以元音字母开头并以元音字母结尾，那么该字符串就是一个 元音字符串 ，其中元音字母是 'a'、'e'、'i'、'o'、'u' 。
+
+返回 words[i] 是元音字符串的数目，其中 i 在闭区间 [left, right] 内。
+
+ 
+
+示例 1：
+
+输入：words = ["are","amy","u"], left = 0, right = 2
+输出：2
+解释：
+- "are" 是一个元音字符串，因为它以 'a' 开头并以 'e' 结尾。
+- "amy" 不是元音字符串，因为它没有以元音字母结尾。
+- "u" 是一个元音字符串，因为它以 'u' 开头并以 'u' 结尾。
+在上述范围中的元音字符串数目为 2 。
+示例 2：
+
+输入：words = ["hey","aeo","mu","ooo","artro"], left = 1, right = 4
+输出：3
+解释：
+- "aeo" 是一个元音字符串，因为它以 'a' 开头并以 'o' 结尾。
+- "mu" 不是元音字符串，因为它没有以元音字母开头。
+- "ooo" 是一个元音字符串，因为它以 'o' 开头并以 'o' 结尾。
+- "artro" 是一个元音字符串，因为它以 'a' 开头并以 'o' 结尾。
+在上述范围中的元音字符串数目为 3 。
+ 
+
+提示：
+
+1 <= words.length <= 1000
+1 <= words[i].length <= 10
+words[i] 仅由小写英文字母组成
+0 <= left <= right < words.length
+"""
+
+class Solution:
+    def vowelStrings(self, words: List[str], left: int, right: int) -> int:
+        d=set(('a','e','i','o','u'))
+        ans=0
+        for i in range(left,right+1):
+            st=words[i]
+            if st[0] in d and st[-1] in d:
+                ans+=1
+        return ans
+
+# 852 山脉数组的峰顶索引
+topic="""
+给定一个长度为 n 的整数 山脉 数组 arr ，其中的值递增到一个 峰值元素 然后递减。
+
+返回峰值元素的下标。
+
+你必须设计并实现时间复杂度为 O(log(n)) 的解决方案。
+
+ 
+
+示例 1：
+
+输入：arr = [0,1,0]
+输出：1
+示例 2：
+
+输入：arr = [0,2,1,0]
+输出：1
+示例 3：
+
+输入：arr = [0,10,5,2]
+输出：1
+ 
+
+提示：
+
+3 <= arr.length <= 105
+0 <= arr[i] <= 106
+题目数据 保证 arr 是一个山脉数组
+"""
+
+class Solution:
+    def peakIndexInMountainArray(self, arr: List[int]) -> int:
+        # 二分法
+        left=0
+        right=len(arr)-1
+        while left<=right:
+            mid=(left+right)//2
+            if mid>left and mid<right:
+                if arr[mid]>arr[mid-1] and arr[mid]<arr[mid+1]:
+                    left=mid
+                elif arr[mid]<arr[mid-1] and arr[mid]>arr[mid+1]:
+                    right=mid
+                else:
+                    return mid
+            else:
+                # 此时只有left==right
+                return left
